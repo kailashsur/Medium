@@ -31,6 +31,19 @@ export class Service {
             fileId
         )
     }
+
+    deleteImage(fileId) {
+        return this.bucket.deleteFile(
+            import.meta.env.VITE_APPWRITE_BUCKET_ID,
+            fileId
+        )
+    }
+    downloadImage(fileId) {
+        return this.bucket.getFileDownload(
+            import.meta.env.VITE_APPWRITE_BUCKET_ID,
+            fileId
+        )
+    }
 }
 //let {$id, data : {href}} = await appwriteServices.uploadFile(img);
 

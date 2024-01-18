@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Logo from '../imgs/logo.png'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
 import { UserContext } from '../App'
 import UserNavigationPanel from './user-navigation.component';
+import axios from 'axios';
 
 export default function Navbar() {
 
@@ -10,10 +11,28 @@ export default function Navbar() {
   const [ userNavPanel, setUserNavPanel ] = useState(false);
   const navigate = useNavigate();
 
-  let { userAuth: {data:{access_token, profile_img}}} = useContext(UserContext);
+  let { userAuth ,userAuth: {data:{access_token, profile_img}, new_notification_available}, setUserAuth} = useContext(UserContext);
 
 
   // const { userAuth, userAuth: { data : { access_token, profile_img } } } = useContext(UserContext)
+
+
+  useEffect(()=>{
+    if(access_token){
+      axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/new-notification", {
+        headers : {
+          'Authorization' : `Bearer ${access_token}`
+        }
+      })
+      .then(({data})=>{
+        setUserAuth({...userAuth, ...data})
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    }
+  },[access_token])
+
 
   const handelUserNavPanel = ()=>{
     setUserNavPanel(currentVal => !currentVal)
@@ -36,6 +55,7 @@ export default function Navbar() {
     
   }
 
+
   return (
     <>
 
@@ -44,6 +64,7 @@ export default function Navbar() {
         <Link to="/" className='flex-none w-10'>
           <img src={Logo} className='w-full' />
         </Link>
+        
 
         <div className={' absolute bg-white w-full left-0 top-full mt-0.5 border-b border-grey py-4 px-[5vw] md:border-0 md:block md:relative md:inset-0 md:p-0 md:w-auto md:show ' + (searchBoxVisibility ? 'show' : 'hide')}>
 {/* search input box */}
@@ -75,9 +96,16 @@ export default function Navbar() {
             //  || access_token != undefined || access_token != null 
             access_token ?
               <>
-                <Link to="/dashboard/notification">
+                <Link to="/dashboard/notifications">
                   <button className='w-12 h-12 rounded-full bg-grey relative hover:bg-black/10'>
                     <i className='fi fi-rr-bell text-2xl block mt-1'></i>
+
+                      {
+                        new_notification_available ?
+                        <span className=' bg-red w-3 h-3 rounded-full absolute z-10 top-2 right-2 shadow-lg'></span>
+                        :
+                        ""
+                      }
                   </button>
                 </Link>
 

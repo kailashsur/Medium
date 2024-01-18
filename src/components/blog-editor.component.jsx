@@ -19,7 +19,7 @@ export default function BlogEditor() {
     // let blogBannerRef = useRef();
     let { blog, blog: { title, banner, content, tags, description }, setBlog, textEditor, setTextEditor, setEditorState } = useContext(EditorContext);
     let { blog_id } = useParams();
-
+console.log(blog_id);
     let { userAuth, userAuth : { data }} = useContext(UserContext)
     let access_token = data.access_token;
 

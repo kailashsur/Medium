@@ -1,25 +1,16 @@
 import axios from 'axios';
 import React from 'react'
+import appwriteServices from './appwrite';
 
-export const uploadImage = async (img)  => {
-  
-    let imgUrl = null;
+export const uploadImage = async (img) => {
+    let url = null;
+    let res = await appwriteServices.uploadFile(img);
+    if(res){
+        let {href} = appwriteServices.getFilePreview(res.$id)
 
-    await axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/get-upload-url")
-    .then( async ({ data : { uploadURL} }) =>{
+        // axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/img-url", { img : href})
 
-        await axios({
-            method : 'PUT',
-            url : uploadURL,
-            headers : { 'Content-Type' : 'multipart/form-data'},
-            data : img
-        })
-        .then(()=>{
-            // console.log(uploadURL);
-            imgUrl = uploadURL.split("?")[0]
-        })
 
-    })
-
-    return imgUrl;
+        return href
+    }
 }

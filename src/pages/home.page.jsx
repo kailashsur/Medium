@@ -8,6 +8,7 @@ import MinimalBlogPost from '../components/nobanner-blog-post.component';
 import NoDataMessage from '../components/nodata.component';
 import { filterPaginationData } from '../common/filter-pagination-data';
 import LoadmoreDataBtn from '../components/load-more.component';
+import LazyBlogPost from '../LazyComponents/lazyBlogPost';
 
 export default function HomePage() {
     const categories = ["programming", "travel", "biography", "tech"];
@@ -80,22 +81,22 @@ export default function HomePage() {
 
     }
 
-    const fetchBlogsByCategory = ({page = 1}) => {
+    const fetchBlogsByCategory = ({ page = 1 }) => {
         axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/search-blogs", { tags: pageState, page })
-        .then( async ({ data })=>{
-            let formatedData = await filterPaginationData({
-                state: blogs, 
-                data: data.blogs,
-                page,
-                countRoute: "/search-blogs-count",
-                data_to_send : { tags : pageState}
+            .then(async ({ data }) => {
+                let formatedData = await filterPaginationData({
+                    state: blogs,
+                    data: data.blogs,
+                    page,
+                    countRoute: "/search-blogs-count",
+                    data_to_send: { tags: pageState }
+                })
+
+                setBlogs(formatedData)
+
+            }).catch(err => {
+                console.log(err);
             })
-
-            setBlogs(formatedData)
-
-        }).catch(err =>{
-            console.log(err);
-        })
 
     }
 
@@ -107,7 +108,7 @@ export default function HomePage() {
         if (pageState == "home") {
             fetchLatestBlogs({ page: 1 });
         } else {
-            fetchBlogsByCategory({ page : 1});
+            fetchBlogsByCategory({ page: 1 });
         }
 
 
@@ -130,22 +131,35 @@ export default function HomePage() {
 
                         <>
                             {
-                                blogs == null ? <Loader /> :
+                                blogs == null ?
+                                    //  <Loader /> 
+
+                                    //----------------Lazy load start------------------------------------
+                                    <>
+                                        <LazyBlogPost/>
+                                        <LazyBlogPost/>
+                                        <LazyBlogPost/>
+                                        <LazyBlogPost/>
+                                        <LazyBlogPost/>
+                                    </>
+                                    //----------------Lazy load end------------------------------------
+
+                                    :
 
 
                                     (
                                         blogs.results.length ?
 
                                             blogs.results.map((blog, i) => {
-                                                return <AnimationWrapper key={i} transition={{ duration: 1, delay: i * .1 }} >
-                                                    <BlogPostCard content={blog} author={blog.author.personal_info} />
-                                                </AnimationWrapper>
+                                                // return <AnimationWrapper key={i} transition={{ duration: 1, delay: i * .1 }} >
+                                                return <BlogPostCard key={i} content={blog} author={blog.author.personal_info} />
+                                                // </AnimationWrapper>
                                             })
                                             : <NoDataMessage message={"No Blogs Found"} />
                                     )
                             }
 
-                            <LoadmoreDataBtn state={blogs} fetchDataFun={ (pageState == "home" ? fetchLatestBlogs : fetchBlogsByCategory)} />
+                            <LoadmoreDataBtn state={blogs} fetchDataFun={(pageState == "home" ? fetchLatestBlogs : fetchBlogsByCategory)} />
                         </>
 
 

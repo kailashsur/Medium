@@ -128,6 +128,7 @@ export default function HomePage() {
                 <div className=' w-full '>
 
                     <InPageNavigation routes={[pageState, "trending blogs"]} defaultHidden={["trending blogs"]} >
+                        
 
                         <>
                             {

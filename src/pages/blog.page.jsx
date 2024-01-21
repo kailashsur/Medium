@@ -8,6 +8,7 @@ import BlogInteraction from '../components/blog-interaction.component';
 import BlogPostCard from '../components/blog-post.component';
 import BlogContent from '../components/blog-content.component';
 import CommentsContainter, { fetchComments } from '../components/comments.component';
+import LazyBlogContent from '../LazyComponents/lazyBlogContent';
 
 
 export const blogStructure = {
@@ -90,7 +91,9 @@ export default function BlogPage() {
     <AnimationWrapper>
 
       {
-        loading ? <Loader />
+        loading ?
+        
+        <LazyBlogContent/>
           :
           <BlogContext.Provider value={{ blog, setBlog, isLikedByUser, setIsLikedByUser, commentWrapper, setCommentWrapper, totalParentCommentsLoaded, setTotalParentCommentsLoaded }} >
 

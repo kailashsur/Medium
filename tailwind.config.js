@@ -11,7 +11,10 @@ export default {
             'red': '#FF4E4E',
             'transparent': 'transparent',
             'twitter': '#1DA1F2',
-            'purple': '#8B46FF'
+            'purple': '#8B46FF',
+            'brand-50': '#F3F0FF',
+            'brand-200' : '#B9A2FF',
+            'brand-500' : '#4318FF'
         },
 
         fontSize: {
@@ -27,8 +30,10 @@ export default {
         extend: {
             fontFamily: {
               inter: ["'Inter'", "sans-serif"],
-              gelasio: ["'Gelasio'", "serif"]
+              gelasio: ["'Gelasio'", "serif"],
+              sourceSerif : [" 'Source Serif 4', 'serif'"]
             },
+
         },
 
     },

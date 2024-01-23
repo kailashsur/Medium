@@ -99,7 +99,7 @@ export default function BlogPage() {
 
             <CommentsContainter />
 
-            <div className=' max-w-[900px] center py-10 max-lg:px-[5vw] '>
+            <div className=' max-w-[680px] center py-10 max-lg:px-[5vw] '>
 
               <img src={banner} className=' aspect-video' />
 
@@ -140,7 +140,7 @@ export default function BlogPage() {
               {/* Blog Contents will go over here */}
               {/*  now start from 1:1:43 */}
 
-              <div className='my-12 font-gelasio blog-page-content '>
+              <div className='my-12 font-sourceSerif blog-page-content '>
 
                 {
                   content[0].blocks.map((block, i) => {

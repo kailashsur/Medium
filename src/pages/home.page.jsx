@@ -103,7 +103,7 @@ export default function HomePage() {
 
     useEffect(() => {
 
-        activeTabRef.current.click();
+        // activeTabRef.current.click();
 
         if (pageState == "home") {
             fetchLatestBlogs({ page: 1 });
@@ -123,12 +123,15 @@ export default function HomePage() {
     return (
         <AnimationWrapper>
 
-            <section className=' h-cover flex justify-center gap-10 ' >
-                {/* Latest Blogs */}
-                <div className=' w-full '>
+            <section className=' h-cover flex flex-col md:flex-row justify-center gap-10 w-full ' >
+                <div className=' md:max-w-[1200px] flex flex-col md:flex-row'>
 
-                    <InPageNavigation routes={[pageState, "trending blogs"]} defaultHidden={["trending blogs"]} >
-                        
+
+                    {/* Latest Blogs */}
+                    <div className='w-full'>
+
+                        {/* <InPageNavigation routes={[pageState, "trending blogs"]} defaultHidden={["trending blogs"]} > */}
+
 
                         <>
                             {
@@ -137,11 +140,11 @@ export default function HomePage() {
 
                                     //----------------Lazy load start------------------------------------
                                     <>
-                                        <LazyBlogPost/>
-                                        <LazyBlogPost/>
-                                        <LazyBlogPost/>
-                                        <LazyBlogPost/>
-                                        <LazyBlogPost/>
+                                        <LazyBlogPost />
+                                        <LazyBlogPost />
+                                        <LazyBlogPost />
+                                        <LazyBlogPost />
+                                        <LazyBlogPost />
                                     </>
                                     //----------------Lazy load end------------------------------------
 
@@ -164,7 +167,7 @@ export default function HomePage() {
                         </>
 
 
-                        {
+                        {/* {
                             trendingBlogs == null ? <Loader /> :
                                 (
                                     trendingBlogs.length ?
@@ -175,58 +178,59 @@ export default function HomePage() {
                                         })
                                         : <NoDataMessage message={"Blogs not exist"} />
                                 )
-                        }
+                        } */}
 
-                    </InPageNavigation>
+                        {/* </InPageNavigation> */}
 
-                </div>
+                    </div>
 
-                {/* for filter and trendigg= */}
+                    {/* for filter and trendigg= */}
 
-                <div className=' min-w-[40%] lg:min-w-[400] max-w-min border-l border-grey pl-8 pt-3 max-md:hidden'>
+                    <div className=' md:min-w-[300px] border-l border-grey pl-8 pt-3 flex flex-col md:flex-row'>
 
-                    <div className='flex flex-col gap-10  '>
+                        <div className='flex flex-col gap-10  '>
 
-                        <div >
-                            <h1 className='font-medium text-xl mb-8'>Stories from all interest</h1>
+                            <div >
+                                <h1 className='font-medium text-xl mb-8'>Stories from all interest</h1>
 
-                            <div className=' flex gap-3 flex-wrap'>
+                                <div className=' flex gap-3 flex-wrap'>
+                                    {
+                                        categories.map((category, i) => {
+                                            return <button className={` tag text-sm ` + (pageState == category ? "  bg-black text-white" : " ")} key={i}
+                                                onClick={loadBlogByCategory}
+                                            >
+                                                {category}
+                                            </button>
+                                        })
+                                    }
+
+                                </div>
+                            </div>
+
+
+
+                            <div className=' w-full'>
+                                <h1 className='font-medium text-xl mb-8'>
+                                    Trending <i className='fi fi-rr-arrow-trend-up'></i>
+                                </h1>
+
                                 {
-                                    categories.map((category, i) => {
-                                        return <button className={` tag ` + (pageState == category ? "  bg-black text-white" : " ")} key={i}
-                                            onClick={loadBlogByCategory}
-                                        >
-                                            {category}
-                                        </button>
-                                    })
-                                }
+                                    trendingBlogs == null ? <Loader /> :
+                                        (
+                                            trendingBlogs.length ?
+                                                trendingBlogs.map((blog, i) => {
+                                                    return <AnimationWrapper key={i} transition={{ duration: 1, delay: i * .1 }} >
+                                                        <MinimalBlogPost blog={blog} index={i} />
+                                                    </AnimationWrapper>
+                                                })
 
+                                                : <NoDataMessage message={"No Blogs Found"} />
+                                        )
+                                }
                             </div>
                         </div>
 
-
-
-                        <div>
-                            <h1 className='font-medium text-xl mb-8'>
-                                Trending <i className='fi fi-rr-arrow-trend-up'></i>
-                            </h1>
-
-                            {
-                                trendingBlogs == null ? <Loader /> :
-                                    (
-                                        trendingBlogs.length ?
-                                            trendingBlogs.map((blog, i) => {
-                                                return <AnimationWrapper key={i} transition={{ duration: 1, delay: i * .1 }} >
-                                                    <MinimalBlogPost blog={blog} index={i} />
-                                                </AnimationWrapper>
-                                            })
-
-                                            : <NoDataMessage message={"No Blogs Found"} />
-                                    )
-                            }
-                        </div>
                     </div>
-
                 </div>
             </section>
 

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Gelasio&family=Inter:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz@8..60&display=swap');
 @import "@flaticon/flaticon-uicons/css/all/all";
 
 @tailwind base;
@@ -95,7 +96,7 @@
     }
 
     #textEditor *, .blog-page-content *{
-        @apply font-gelasio text-xl leading-10 md:text-2xl;
+        @apply font-gelasio text-base leading-9 md:text-2xl;
     }
 
     #textEditor a, .blog-page-content a{
@@ -103,7 +104,7 @@
     }
 
     .tag{
-        @apply p-3 bg-grey rounded-full px-6 capitalize;
+        @apply  bg-grey rounded-full py-2 px-5 capitalize;
     }
 
     .blog-title{

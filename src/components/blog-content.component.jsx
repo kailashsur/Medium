@@ -46,7 +46,7 @@ export default function BlogContent({block}) {
   let { type, data } = block;
 
   if(type == "paragraph"){
-    return <p dangerouslySetInnerHTML={{__html: data.text}} ></p>
+    return <p dangerouslySetInnerHTML={{__html: data.text}} className=' font-sourceSerif' ></p>
   }
   if(type == "header"){
     if(data.level == 3){

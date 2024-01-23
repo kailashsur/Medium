@@ -70,7 +70,7 @@ export default function ManageBlogs() {
               activity: { total_likes, total_comments, total_reads },
               author: { personal_info: { fullname, profile_img, username } }
             }, i) => {
-              return <div key={i} className=' h-full w-full py-4 px-4 flex flex-col rounded-2xl shadow-brand-500/50 shadow-2xl'>
+              return <div key={i} className=' h-full w-full py-4 px-4 flex flex-col rounded-2xl shadow-brand-500/30 shadow-2xl'>
 
                 <div className=' flex flex-row justify-between'>
                   <div className='line-clamp-1'> {title} </div>

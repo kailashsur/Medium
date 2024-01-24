@@ -96,7 +96,7 @@
     }
 
     #textEditor *, .blog-page-content *{
-        @apply font-gelasio text-base leading-9 md:text-2xl;
+        @apply font-gelasio leading-9 md:text-2xl;
     }
 
     #textEditor a, .blog-page-content a{

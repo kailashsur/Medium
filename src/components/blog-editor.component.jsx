@@ -37,7 +37,6 @@ export default function BlogEditor() {
     const handelBannerUpload = (e) => {
         // console.log(e.target.files[0]);
         let img = e.target.files[0];
-        console.log(img);
 
         if (img) {
             let loadingToast = toast.loading("Uploading...")

@@ -9,7 +9,7 @@ export default function ManageBlogs() {
   const { userAuth: { data: { access_token } } } = useContext(UserContext);
 
   const [blogs, setBlogs] = useState([]);
-  const [activeTab, setActiveTab] = useState('All'); // Added activeTab state
+  const [activeTab, setActiveTab] = useState('Published'); // Added activeTab state
 
   const getBlogs = ({ draft }) => {
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + `/user-posts`, { draft }, {
@@ -27,9 +27,6 @@ export default function ManageBlogs() {
   };
 
   const deletePost = ({ blog_id }) => {
-
-
-
 
     axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/delete-user-post", { blog_id }, {
       headers: {
@@ -58,8 +55,8 @@ export default function ManageBlogs() {
 
   useEffect(() => {
     // Load initial data when the component mounts
-    getBlogs({ draft: undefined });
-  }, [blogs]);
+    getBlogs({ draft: false });
+  }, [activeTab]);
 
   const handleTabClick = (tabName, draftValue) => {
     setActiveTab(tabName);
@@ -69,13 +66,9 @@ export default function ManageBlogs() {
   return (
     <section className='w-full'>
       <Toaster />
+      <div className='flex flex-row justify-between'>
       <div className='top-0 flex gap-4 items-start w-full h-fit border-b border-grey pb-4'>
-        <div
-          className={`pb-2 cursor-pointer ${activeTab === 'All' ? 'border-b border-dark-grey' : ''}`}
-          onClick={() => handleTabClick('All', undefined)}
-        >
-          All
-        </div>
+        
         <div
           className={`pb-2 cursor-pointer ${activeTab === 'Published' ? 'border-b border-dark-grey' : ''}`}
           onClick={() => handleTabClick('Published', false)}
@@ -88,6 +81,10 @@ export default function ManageBlogs() {
         >
           Draft
         </div>
+      </div>
+
+      <Link to={"/editor"} className='flex flex-row'><i className="fi fi-rr-add-document hover:text-purple "></i></Link>
+
       </div>
       {/* Render your blogs or other content based on the active tab */}
 

@@ -59,7 +59,7 @@ export default function Navbar() {
   return (
     <>
 
-      <nav className='navbar z-50'>
+      <nav className='navbar z-40'>
 
         <Link to="/" className='flex-none w-10'>
           <img src={Logo} className='w-full' />

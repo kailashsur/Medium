@@ -31,6 +31,12 @@ export class Service {
             fileId
         )
     }
+    getFileView(fileId){
+        return this.bucket.getFileView(
+            import.meta.env.VITE_APPWRITE_BUCKET_ID,
+            fileId
+        )
+    }
 
     deleteImage(fileId) {
         return this.bucket.deleteFile(

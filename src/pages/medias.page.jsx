@@ -45,13 +45,16 @@ export default function Medias() {
         }
     }
     // console.log(images);
-    const handelViewDetails =({id, name, url, images, setImages})=>{
+    const handelViewDetails = ({ id, name, url, images, setImages }) => {
         setShowImageView(true)
-        setSelectedImage({id, name, url, setShowImageView, images, setImages})
+        setSelectedImage({ id, name, url, setShowImageView, images, setImages })
     }
 
     return admin == true ? (
-        <div className='w-full h-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 justify-center items-center'>
+        <div className='w-full h-full grid grid-cols-2 sm:grid-cols-2 md:flex md:flex-wrap gap-4 justify-center items-start'>
+
+           
+
             <Toaster />
             {showImageView ? selectedImage && <MediaDetails {...selectedImage} /> : ""}
             {
@@ -62,17 +65,15 @@ export default function Medias() {
                         :
                         images.files.map(({ id, name, url }, i) => {
                             return (
-                                <div key={i} className="bg-white p-4 shadow-md">
-                                    <div className=' flex items-center justify-between'>
-                                        <div className=' text-base line-clamp-1'>{name}</div>
-                                        <i className="fi fi-rr-trash text-xl cursor-pointer"
-                                            onClick={() => handelRemoveImage(id)}
-                                        ></i>
+                                <div key={i} className="bg-white p-4 border border-dark-grey/30 rounded-md w-48 h-48 overflow-hidden  cursor-pointer flex flex-col justify-centerr">
+                                    <div className='flex items-center justify-between'>
+                                        <div className='text-base line-clamp-1'>{name}</div>
+                                        <i className="fi fi-rr-trash text-xl cursor-pointer" onClick={() => handelRemoveImage(id)}></i>
                                     </div>
-                                    <img src={url} alt={name} className="mt-2 w-full h-auto cursor-pointer" 
-                                    onClick={()=>handelViewDetails({id, name, url, images, setImages})}
-                                    />
+                                    <img src={url} alt={name} className="mt-2 h-full w-full max-h-full max-w-full " onClick={() => handelViewDetails({ id, name, url, images, setImages })} />
                                 </div>
+
+
                             )
                         })
                     :

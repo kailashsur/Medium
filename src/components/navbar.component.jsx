@@ -18,19 +18,19 @@ export default function Navbar() {
 
 
   useEffect(()=>{
-    if(access_token){
-      axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/new-notification", {
-        headers : {
-          'Authorization' : `Bearer ${access_token}`
-        }
-      })
-      .then(({data})=>{
-        setUserAuth({...userAuth, ...data})
-      })
-      .catch(err=>{
-        console.log(err);
-      })
-    }
+    // if(access_token){
+    //   axios.get(import.meta.env.VITE_SERVER_DOMAIN + "/new-notification", {
+    //     headers : {
+    //       'Authorization' : `Bearer ${access_token}`
+    //     }
+    //   })
+    //   .then(({data})=>{
+    //     setUserAuth({...userAuth, ...data})
+    //   })
+    //   .catch(err=>{
+    //     console.log(err);
+    //   })
+    // }
   },[access_token])
 
 
@@ -96,7 +96,7 @@ export default function Navbar() {
             //  || access_token != undefined || access_token != null 
             access_token ?
               <>
-                <Link to="/dashboard/notifications">
+                {/* <Link to="/dashboard/notifications">
                   <button className='w-12 h-12 rounded-full bg-grey relative hover:bg-black/10'>
                     <i className='fi fi-rr-bell text-2xl block mt-1'></i>
 
@@ -107,7 +107,7 @@ export default function Navbar() {
                         ""
                       }
                   </button>
-                </Link>
+                </Link> */}
 
                 <div className='relative'
                 onClick={handelUserNavPanel}

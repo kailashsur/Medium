@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import Logo from '../imgs/logo.png'
 import AnimationWrapper from '../common/page-animation'
@@ -10,6 +10,7 @@ import EditorJS from '@editorjs/editorjs'
 import { Tools } from './tools.component'
 import axios from 'axios'
 import { UserContext } from '../App'
+import UserLib from './user-lib.components'
 
 
 export default function BlogEditor() {
@@ -19,8 +20,10 @@ export default function BlogEditor() {
     // let blogBannerRef = useRef();
     let { blog, blog: { title, banner, content, tags, description }, setBlog, textEditor, setTextEditor, setEditorState } = useContext(EditorContext);
     let { blog_id } = useParams();
-    let { userAuth, userAuth : { data }} = useContext(UserContext)
+    let { userAuth, userAuth: { data } } = useContext(UserContext)
     let access_token = data.access_token;
+
+    const [showLib, setShowLib] = useState(false)
 
     useEffect(() => {
         if (!textEditor.isReady) {
@@ -56,6 +59,11 @@ export default function BlogEditor() {
                     return toast.error(err);
                 })
         }
+    }
+
+    const hendelOpenLib = ()=>{
+        setShowLib(true)
+        // UserLib({setShowLib});
     }
 
     const handelTitleKeyDown = (e) => {
@@ -117,7 +125,7 @@ export default function BlogEditor() {
         if (!title.length) {
             return toast.error("Write title to draft")
         }
-         
+
 
         let loadingToast = toast.loading("Saving Draft...");
 
@@ -126,23 +134,23 @@ export default function BlogEditor() {
         e.target.classList.add('disable');
 
 
-        if(textEditor.isReady){
-            textEditor.save().then(content =>{
+        if (textEditor.isReady) {
+            textEditor.save().then(content => {
 
                 let blogObj = {
                     title, banner, description, content, tags, draft: true
-                } 
-                axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-blog", {...blogObj, id: blog_id}, {
+                }
+                axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-blog", { ...blogObj, id: blog_id }, {
                     headers: {
                         'Authorization': `Bearer ${access_token}`
                     }
-                })   
+                })
                     .then(() => {
                         e.target.classList.remove('disable');
-        
+
                         toast.dismiss(loadingToast);
                         toast.success("Saved ✔");
-        
+
                         setTimeout(() => {
                             // we will change it to dashboard later
                             navigate("/");
@@ -151,9 +159,9 @@ export default function BlogEditor() {
                     .catch(({ responce }) => {
                         e.target.classList.remove('disable');
                         toast.dismiss(loadingToast);
-        
+
                         return toast.error(responce.data.error)
-        
+
                     })
             })
         }
@@ -161,7 +169,6 @@ export default function BlogEditor() {
 
 
     }
-
     return (
         <>
             <nav className='navbar '>
@@ -191,13 +198,17 @@ export default function BlogEditor() {
             </nav>
             <Toaster />
             <AnimationWrapper>
-                <section>
+                <section className="overflow-hidden">
                     <div className='mx-auto max-w-[900px] w-full '>
+
+                        {
+                            showLib ? <UserLib setShowLib={setShowLib}/> : ""
+                        }
+
                         {/* Banner Uploading secction start */}
                         <div className=" relative aspect-video bg-white border-4 border-grey hover:opacity-80" >
                             <label htmlFor='uploadBanner'>
                                 <img
-                                    // ref={blogBannerRef}
                                     src={banner}
                                     onError={handelBannerError}
                                     className=' z-20'
@@ -211,6 +222,20 @@ export default function BlogEditor() {
                                     onChange={handelBannerUpload}
                                 />
                             </label>
+                        </div>
+                        <div className=' flex justify-center items-center h-5 mt-5 text-dark-grey font-bold'>
+                            Or
+                        </div>
+
+                        <div className=" mt-5 py-5 flex justify-center items-center bg-white border-4 border-grey hover:opacity-80 cursor-pointer"
+                        onClick={hendelOpenLib}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-dark-grey">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                            </svg>
+
+                            <span className=' ml-5 text-xl font-bold text-dark-grey'> Open Library </span>
+
                         </div>
                         {/* banner ends */}
 

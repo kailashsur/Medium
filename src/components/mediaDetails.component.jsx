@@ -1,9 +1,12 @@
-import React, { useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import appwriteServices from '../common/appwrite';
 import toast, { Toaster } from 'react-hot-toast';
+import { EditorContext } from '../pages/editor.pages';
 
-export default function MediaDetails({ id, name, url, setShowImageView, images, setImages }) {
+export default function MediaDetails({ id, name, url, setShowImageView, images, setImages, editor=false,setShowLib }) {
     const textFieldRef = useRef(null);
+    let { blog, setBlog} = useContext(EditorContext);
+
 
     const handleCopyToClipboard = () => {
         if (textFieldRef.current) {
@@ -31,6 +34,13 @@ export default function MediaDetails({ id, name, url, setShowImageView, images, 
             toast.dismiss(loading)
         }
     }
+
+    const handelSelect =()=>{
+        setBlog({ ...blog, banner: url })
+        handelClose();
+        setShowLib(false);
+
+    }
     return (
         <div className=' fixed top-0 left-0  w-full h-full overflow-hidden z-50 flex flex-col items-center justify-center backdrop-filter backdrop-blur-lg'>
             <Toaster/>
@@ -54,7 +64,15 @@ export default function MediaDetails({ id, name, url, setShowImageView, images, 
                         style={{ whiteSpace: 'nowrap' }}
                     />
                 </div>
+                <div className=' flex flex-row justify-center items-center gap-4'>
+
                 <button onClick={handleCopyToClipboard} className='h-10 px-6 font-semibold rounded-md bg-black text-white mt-4 active:bg-black/90'>Copy to Clipboard</button>
+                {
+                    editor ? 
+                    <button onClick={handelSelect} className='h-10 px-6 font-semibold rounded-md bg-black text-white mt-4 active:bg-black/90'>Select</button>
+                    :""
+                }
+                </div>
 
             </div>
 

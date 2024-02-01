@@ -26,6 +26,7 @@ export default function BlogEditor() {
 
     let { blog_id: url_id } = useParams();
     const [blog_id, setBlogId] = useState(url_id);
+    const [slug, setSlug] = useState(undefined);
 
     let slug_ref = useRef();
 
@@ -94,6 +95,35 @@ export default function BlogEditor() {
         img.src = defaultBanner;
     }
 
+
+    //-------------------slug setup -----------------
+    const HandelSlugUpdate = (e) => {
+        let new_blog_id = slug_ref.current.value;
+
+        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/change-slug", { blog_id: url_id, new_blog_id }, {
+            headers: {
+                'Authorization': `Bearer ${access_token}`
+            }
+        })
+            .then(() => {
+
+                toast.success("Slug Changed")
+
+                setTimeout(() => {
+                    navigate("/");
+                }, 2000)
+            })
+            .catch(err => {
+                e.target.classList.remove('desable')
+                toast.error("Something went wrong");
+            })
+    }
+
+    const HandelSlugSet = (e) => {
+        setSlug(slug_ref.current.value)
+    }
+
+
     const handelPublishEvent = () => {
 
         if (!banner.length) {
@@ -145,7 +175,7 @@ export default function BlogEditor() {
                 let blogObj = {
                     title, banner, description, content, tags, draft: true
                 }
-                axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-blog", { ...blogObj, id: blog_id }, {
+                axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/create-blog", { ...blogObj, id: blog_id, slug: slug }, {
                     headers: {
                         'Authorization': `Bearer ${access_token}`
                     }
@@ -176,29 +206,7 @@ export default function BlogEditor() {
     }
 
 
-    //-------------------slug setup -----------------
-    const HandelSlugUpdate = (e) => {
-        let new_blog_id = slug_ref.current.value;
-        
-        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/change-slug", { url_id, new_blog_id },{
-            headers : {
-                'Authorization' : `Bearer ${access_token}`
-            }
-        })
-        .then(()=>{
-            e.target.classList.remove('desable');
 
-            toast.success("Slug Changed")
-
-            setTimeout(()=>{
-                navigate("/");
-            }, 2000)
-        })
-        .catch(err =>{
-            e.target.classList.remove('desable')
-            toast.error("Something went wrong");
-        })
-    }
     return (
         <>
             <nav className='navbar '>
@@ -293,6 +301,13 @@ export default function BlogEditor() {
 
                     </div>
 
+                    //-------------Mobile view of settings
+                    <div className=' md:hidden fixed top-40 right-0 p-1 bg-black text-white '>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path stroke-linecap="round" strokeLinejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+
+                    </div>
                     <div className=' col-span-1 hidden md:block border-l border-l-dark-grey/30 p-4 '>
                         <div>
                             <div className=' border-l-4 border-l-dark-grey pl-3 text-xl' > Change slug </div>
@@ -302,20 +317,23 @@ export default function BlogEditor() {
                                     ref={slug_ref}
                                     className=' input-box p-2 text-sm'
                                     defaultValue={blog_id}
-
-                                    onChange={(e) => {
-                                        setBlogId(e.target.value);
-
-                                    }}
                                 />
                                 {
-                                    blog_id ?
+                                    url_id ?
                                         <button className=' bg-black text-sm text-white px-4 py-2 rounded-md'
                                             onClick={HandelSlugUpdate}
                                         >
                                             Update
                                         </button>
-                                        : ""
+                                        :
+                                        ""
+                                }
+                                {
+                                    !slug ? <button className=' bg-black text-sm text-white px-4 py-2 rounded-md'
+                                        onClick={HandelSlugSet}
+                                    >
+                                        Set
+                                    </button> : ""
                                 }
                             </div>
                         </div>

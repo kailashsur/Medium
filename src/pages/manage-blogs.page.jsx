@@ -101,7 +101,7 @@ export default function ManageBlogs() {
             }, i) => {
               return <div key={i} className=' flex items-center'>
 
-                <div className=' h-full w-full py-4 px-4 flex flex-col rounded-2xl shadow-brand-500/30 shadow-2xl'>
+                <div className=' h-full w-full py-4 px-4 flex flex-col border border-dark-grey/30 rounded-md'>
                   <div className=' flex flex-row justify-between'>
                     <div className='line-clamp-1'> {title} </div>
 

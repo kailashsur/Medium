@@ -19,11 +19,16 @@ export default function BlogEditor() {
 
     // let blogBannerRef = useRef();
     let { blog, blog: { title, banner, content, tags, description }, setBlog, textEditor, setTextEditor, setEditorState } = useContext(EditorContext);
-    let { blog_id } = useParams();
     let { userAuth, userAuth: { data } } = useContext(UserContext)
     let access_token = data.access_token;
 
-    const [showLib, setShowLib] = useState(false)
+    const [showLib, setShowLib] = useState(false);
+
+    let { blog_id: url_id } = useParams();
+    const [blog_id, setBlogId] = useState(url_id);
+
+    let slug_ref = useRef();
+
 
     useEffect(() => {
         if (!textEditor.isReady) {
@@ -61,7 +66,7 @@ export default function BlogEditor() {
         }
     }
 
-    const hendelOpenLib = ()=>{
+    const hendelOpenLib = () => {
         setShowLib(true)
         // UserLib({setShowLib});
     }
@@ -169,6 +174,31 @@ export default function BlogEditor() {
 
 
     }
+
+
+    //-------------------slug setup -----------------
+    const HandelSlugUpdate = (e) => {
+        let new_blog_id = slug_ref.current.value;
+        
+        axios.post(import.meta.env.VITE_SERVER_DOMAIN + "/change-slug", { url_id, new_blog_id },{
+            headers : {
+                'Authorization' : `Bearer ${access_token}`
+            }
+        })
+        .then(()=>{
+            e.target.classList.remove('desable');
+
+            toast.success("Slug Changed")
+
+            setTimeout(()=>{
+                navigate("/");
+            }, 2000)
+        })
+        .catch(err =>{
+            e.target.classList.remove('desable')
+            toast.error("Something went wrong");
+        })
+    }
     return (
         <>
             <nav className='navbar '>
@@ -198,11 +228,11 @@ export default function BlogEditor() {
             </nav>
             <Toaster />
             <AnimationWrapper>
-                <section className="overflow-hidden">
-                    <div className='mx-auto max-w-[900px] w-full '>
+                <section className="md:grid md:grid-cols-3 md:gap-4">
+                    <div className='mx-auto max-w-[680px] w-full md:col-span-2 '>
 
                         {
-                            showLib ? <UserLib setShowLib={setShowLib}/> : ""
+                            showLib ? <UserLib setShowLib={setShowLib} /> : ""
                         }
 
                         {/* Banner Uploading secction start */}
@@ -228,9 +258,9 @@ export default function BlogEditor() {
                         </div>
 
                         <div className=" mt-5 py-5 flex justify-center items-center bg-white border-4 border-grey hover:opacity-80 cursor-pointer"
-                        onClick={hendelOpenLib}
+                            onClick={hendelOpenLib}
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-dark-grey">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-dark-grey">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                             </svg>
 
@@ -260,6 +290,35 @@ export default function BlogEditor() {
                         </div>
 
                         {/* text editor ends here */}
+
+                    </div>
+
+                    <div className=' col-span-1 hidden md:block border-l border-l-dark-grey/30 p-4 '>
+                        <div>
+                            <div className=' border-l-4 border-l-dark-grey pl-3 text-xl' > Change slug </div>
+                            <hr className='w-full opacity-10 my-5' />
+                            <div className=' flex gap-4'>
+                                <input type="text"
+                                    ref={slug_ref}
+                                    className=' input-box p-2 text-sm'
+                                    defaultValue={blog_id}
+
+                                    onChange={(e) => {
+                                        setBlogId(e.target.value);
+
+                                    }}
+                                />
+                                {
+                                    blog_id ?
+                                        <button className=' bg-black text-sm text-white px-4 py-2 rounded-md'
+                                            onClick={HandelSlugUpdate}
+                                        >
+                                            Update
+                                        </button>
+                                        : ""
+                                }
+                            </div>
+                        </div>
 
                     </div>
                 </section>

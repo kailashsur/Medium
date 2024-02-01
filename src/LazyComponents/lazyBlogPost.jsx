@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function LazyBlogPost() {
     return (
-        <div role="status" className=' flex gap-8 items-center border-b border-grey pb-5 mb-4 animate-pulse'>
+        <div role="status" className=' max-w-[680px] flex gap-8 items-center border-b border-grey pb-5 mb-4 animate-pulse'>
             <div className=' w-full' >
                 <div className='flex gap-2 items-center mb-4'>
                     <div className=' bg-grey w-6 h-6 rounded-full'></div>

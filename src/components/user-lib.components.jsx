@@ -10,7 +10,8 @@ export default function UserLib({ setShowLib }) {
     let { userAuth: { data: { admin, access_token } } } = useContext(UserContext)
     const [images, setImages] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [showImageView, setShowImageView] = useState(false)
+    const [showImageView, setShowImageView] = useState(false);
+    let lezyArr = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 
     const handelClose = () => {
@@ -73,7 +74,7 @@ export default function UserLib({ setShowLib }) {
     // console.log(images);
     const handelViewDetails = ({ id, name, url, images, setImages }) => {
         setShowImageView(true)
-        setSelectedImage({ id, name, url, setShowImageView, images, setImages, editor:true, setShowLib })
+        setSelectedImage({ id, name, url, setShowImageView, images, setImages, editor: true, setShowLib })
     }
 
     return (
@@ -112,36 +113,44 @@ export default function UserLib({ setShowLib }) {
 
                 {
                     admin ?
-                        <div className='w-full h-full grid grid-cols-2 md:grid-cols-3 gap-2 justify-evenly py-4 mb-4'>
-
-
-
-                            <Toaster />
-                            {showImageView ? selectedImage && <MediaDetails {...selectedImage} /> : ""}
-                            {
-                                images != null ?
-                                    images.total == 0 ?
-                                        <div className=' px-10 text-dark-grey'>
-                                            No Medias</div>
-                                        :
-                                        images.files.map(({ id, name, url }, i) => {
-                                            return (
-                                                <div key={i} className="bg-white p-4 border border-dark-grey/30 rounded-md w-48 h-48 overflow-hidden  cursor-pointer flex flex-col justify-centerr">
-                                                    <div className='flex items-center justify-between'>
-                                                        <div className='text-base line-clamp-1'>{name}</div>
-                                                        <i className="fi fi-rr-trash text-xl cursor-pointer" onClick={() => handelRemoveImage(id)}></i>
+                        <div className=' grid grid-cols-1 place-items-center'>
+                            <div className=' grid grid-cols-2 md:grid-cols-3 gap-4'>
+                                <Toaster />
+                                {showImageView ? selectedImage && <MediaDetails {...selectedImage} /> : ""}
+                                {
+                                    images != null ?
+                                        images.total == 0 ?
+                                            <div className=' px-10 text-dark-grey'>
+                                                No Medias</div>
+                                            :
+                                            images.files.map(({ id, name, url }, i) => {
+                                                return (
+                                                    <div key={i} className="bg-white p-4 border border-dark-grey/30 rounded-md w-48 h-48 overflow-hidden  cursor-pointer flex flex-col justify-centerr">
+                                                        <div className='flex items-center justify-between'>
+                                                            <div className='text-base line-clamp-1'>{name}</div>
+                                                            <i className="fi fi-rr-trash text-xl cursor-pointer" onClick={() => handelRemoveImage(id)}></i>
+                                                        </div>
+                                                        <img src={url} alt={name} className="mt-2 h-full w-full max-h-full max-w-full " onClick={() => handelViewDetails({ id, name, url, images, setImages })} />
                                                     </div>
-                                                    <img src={url} alt={name} className="mt-2 h-full w-full max-h-full max-w-full " onClick={() => handelViewDetails({ id, name, url, images, setImages })} />
+
+
+                                                )
+                                            })
+                                        :
+                                        
+                                        lezyArr.map((i)=>{
+                                            return(
+
+                                                <div key={i} role='status' className="bg-white p-4 border border-dark-grey/30 rounded-md w-48 h-48 animate-pulse">
+                                                    <div className=' bg-grey'>
+                                                        <div className=' bg-grey h-2 rounded-full w-full'></div>
+                                                    </div>
+                                                    <div className="mt-2 h-auto rounded-md bg-grey w-full max-h-full max-w-full "></div>
                                                 </div>
-
-
                                             )
                                         })
-                                    :
-                                    <div>
-                                        Loading...
-                                    </div>
-                            }
+                                }
+                            </div>
                         </div>
                         :
                         <div>You are not admin </div>
